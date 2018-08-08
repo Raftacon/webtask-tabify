@@ -38,7 +38,8 @@ server.get('/', function (req, res) {
             "Authorization": "Bearer " + b.access_token
           }
         }, function (e2, r2, b2) {
-          if (b2.item) {
+          if (b2 === undefined) { res.send(JSON.stringify({ "error": "Couldn't find currently-playing song in Spotify." })); }
+          else {
             // Use ultimate-guitar-scraper to search for the best-
             // matching tab and redirect user to that URL:
             ugs.search({
@@ -58,11 +59,6 @@ server.get('/', function (req, res) {
               res.writeHead(200, { 'Content-Type': 'text/html' });
               res.end(templateLiteral);
             });
-          } else {
-            res.writeHead(404);
-            res.send(JSON.stringify({
-              "error": "Couldn't find currently-playing song in Spotify."
-            }));
           }
         });
       } else {
